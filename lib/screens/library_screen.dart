@@ -107,9 +107,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
     return Column(
       children: [
         // Stats bar
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
           child: Row(
             children: [
               _statChip('all', 'Tous', books.length, AppColors.txt),
@@ -210,35 +209,40 @@ class _LibraryScreenState extends State<LibraryScreen> {
 
   Widget _statChip(String filter, String label, int count, Color numColor) {
     final active = _filter == filter;
-    return GestureDetector(
-      onTap: () => setState(() => _filter = filter),
-      child: Container(
-        margin: const EdgeInsets.only(right: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-        decoration: BoxDecoration(
-          color: active ? AppColors.acc3 : AppColors.sur,
-          border: Border.all(color: active ? AppColors.acc : AppColors.bdr),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          children: [
-            Text(
-              '$count',
-              style: AppTheme.ui(
-                size: 14,
-                weight: FontWeight.w700,
-                color: active ? AppColors.acc : numColor,
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => setState(() => _filter = filter),
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 3),
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 7),
+          decoration: BoxDecoration(
+            color: active ? AppColors.acc3 : AppColors.sur,
+            border: Border.all(color: active ? AppColors.acc : AppColors.bdr),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '$count',
+                style: AppTheme.ui(
+                  size: 13,
+                  weight: FontWeight.w700,
+                  color: active ? AppColors.acc : numColor,
+                ),
               ),
-            ),
-            const SizedBox(width: 7),
-            Text(
-              label,
-              style: AppTheme.mono(
-                size: 11,
-                color: active ? AppColors.acc : AppColors.mut,
+              const SizedBox(height: 2),
+              Text(
+                label,
+                style: AppTheme.mono(
+                  size: 9,
+                  color: active ? AppColors.acc : AppColors.mut,
+                ),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

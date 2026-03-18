@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:intl/intl.dart';
 import '../theme.dart';
 import '../models/book.dart';
+import '../widgets/cover_image.dart';
 import 'home_screen.dart';
 import 'book_detail_screen.dart';
 
@@ -280,7 +280,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
   }
 
   Widget _bookCard(Book b) {
-    final hasCover = b.cover != null && b.cover!.isNotEmpty;
     return GestureDetector(
       onTap: () => _openDetail(b),
       child: Container(
@@ -302,13 +301,12 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 border: Border.all(color: AppColors.bdr),
               ),
               clipBehavior: Clip.antiAlias,
-              child: hasCover
-                  ? CachedNetworkImage(
-                      imageUrl: b.cover!,
-                      fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => const Center(child: Text('📕', style: TextStyle(fontSize: 22))),
-                    )
-                  : const Center(child: Text('📕', style: TextStyle(fontSize: 22))),
+              child: CoverImage(
+                coverUrl: b.cover,
+                width: 54,
+                height: 88,
+                placeholderFontSize: 22,
+              ),
             ),
             const SizedBox(width: 14),
             // Info

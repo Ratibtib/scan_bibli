@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import '../theme.dart';
 import '../models/book.dart';
+import '../widgets/cover_image.dart';
 
 class ScanResultSheet extends StatefulWidget {
   final Book book;
@@ -68,7 +68,6 @@ class _ScanResultSheetState extends State<ScanResultSheet> {
     final b = widget.book;
     final notFound = b.title == 'Titre non trouvé';
     final meta = b.metaLine;
-    final hasCover = b.cover != null && b.cover!.isNotEmpty;
 
     return Container(
       constraints: BoxConstraints(
@@ -120,13 +119,12 @@ class _ScanResultSheetState extends State<ScanResultSheet> {
                           border: Border.all(color: AppColors.bdr),
                         ),
                         clipBehavior: Clip.antiAlias,
-                        child: hasCover
-                            ? CachedNetworkImage(
-                                imageUrl: b.cover!,
-                                fit: BoxFit.cover,
-                                errorWidget: (_, __, ___) => const Center(child: Text('📕', style: TextStyle(fontSize: 28))),
-                              )
-                            : const Center(child: Text('📕', style: TextStyle(fontSize: 28))),
+                        child: CoverImage(
+                          coverUrl: b.cover,
+                          width: 72,
+                          height: 72 * 18 / 11,
+                          placeholderFontSize: 28,
+                        ),
                       ),
                       const SizedBox(width: 16),
                       // Info

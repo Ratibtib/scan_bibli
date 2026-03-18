@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import '../theme.dart';
 import '../models/book.dart';
 import '../services/auth_service.dart';
 import '../services/book_service.dart';
+import '../widgets/cover_image.dart';
 import 'home_screen.dart';
 
 class BookDetailScreen extends StatefulWidget {
@@ -181,36 +181,12 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   }
 
   Widget _coverWidget() {
-    if (_newCoverBase64 != null) {
-      // Base64 cover
-      final parts = _newCoverBase64!.split(',');
-      final bytes = base64Decode(parts.length > 1 ? parts[1] : parts[0]);
-      return Image.memory(Uint8List.fromList(bytes), fit: BoxFit.cover, width: 110, height: 110 * 18 / 11);
-    }
-    final c = widget.book.cover;
-    if (c != null && c.isNotEmpty) {
-      if (c.startsWith('data:')) {
-        final parts = c.split(',');
-        final bytes = base64Decode(parts.length > 1 ? parts[1] : parts[0]);
-        return Image.memory(Uint8List.fromList(bytes), fit: BoxFit.cover, width: 110, height: 110 * 18 / 11);
-      }
-      return CachedNetworkImage(
-        imageUrl: c,
-        fit: BoxFit.cover,
-        width: 110,
-        height: 110 * 18 / 11,
-        errorWidget: (_, __, ___) => _coverPlaceholder(),
-      );
-    }
-    return _coverPlaceholder();
-  }
-
-  Widget _coverPlaceholder() {
-    return Container(
+    final url = _newCoverBase64 ?? widget.book.cover;
+    return CoverImage(
+      coverUrl: url,
       width: 110,
       height: 110 * 18 / 11,
-      color: AppColors.sur2,
-      child: const Center(child: Text('📕', style: TextStyle(fontSize: 40))),
+      placeholderFontSize: 40,
     );
   }
 
@@ -347,35 +323,31 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                               ),
                               const SizedBox(height: 12),
                               // Status row
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: Book.statusOrder.map((s) {
-                                    final active = _status == s;
-                                    return Padding(
-                                      padding: const EdgeInsets.only(right: 6),
-                                      child: GestureDetector(
-                                        onTap: () => setState(() => _status = s),
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-                                          decoration: BoxDecoration(
-                                            color: active ? _statusBgColor(s) : Colors.transparent,
-                                            border: Border.all(color: active ? _statusColor(s) : AppColors.bdr2),
-                                            borderRadius: BorderRadius.circular(20),
-                                          ),
-                                          child: Text(
-                                            Book.statusLabels[s]!,
-                                            style: AppTheme.ui(
-                                              size: 10,
-                                              weight: FontWeight.w700,
-                                              color: active ? _statusColor(s) : AppColors.mut,
-                                            ),
-                                          ),
+                              Wrap(
+                                spacing: 4,
+                                runSpacing: 4,
+                                children: Book.statusOrder.map((s) {
+                                  final active = _status == s;
+                                  return GestureDetector(
+                                    onTap: () => setState(() => _status = s),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                      decoration: BoxDecoration(
+                                        color: active ? _statusBgColor(s) : Colors.transparent,
+                                        border: Border.all(color: active ? _statusColor(s) : AppColors.bdr2),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Text(
+                                        Book.statusLabels[s]!,
+                                        style: AppTheme.ui(
+                                          size: 9,
+                                          weight: FontWeight.w700,
+                                          color: active ? _statusColor(s) : AppColors.mut,
                                         ),
                                       ),
-                                    );
-                                  }).toList(),
-                                ),
+                                    ),
+                                  );
+                                }).toList(),
                               ),
                             ],
                           ),

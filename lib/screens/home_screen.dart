@@ -91,12 +91,17 @@ class HomeScreenState extends State<HomeScreen> {
         backgroundColor: AppColors.sur,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
-        title: Row(
-          children: [
-            const Text('📚 ', style: TextStyle(fontSize: 20)),
-            Text('Ma ', style: AppTheme.display(size: 22)),
-            Text('Bibliothèque', style: AppTheme.display(size: 22, color: AppColors.acc)),
-          ],
+        title: FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('📚 ', style: TextStyle(fontSize: 18)),
+              Text('Ma ', style: AppTheme.display(size: 20)),
+              Text('Bibliothèque', style: AppTheme.display(size: 20, color: AppColors.acc)),
+            ],
+          ),
         ),
         actions: [
           Container(

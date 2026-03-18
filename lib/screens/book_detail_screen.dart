@@ -319,7 +319,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                 b.authors,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: AppTheme.ui(size: 13, color: AppColors.acc.withOpacity(0.9)),
+                                style: AppTheme.ui(size: 13, color: Colors.white),
                               ),
                               const SizedBox(height: 12),
                               // Status row
@@ -333,7 +333,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                                       decoration: BoxDecoration(
-                                        color: active ? _statusBgColor(s) : Colors.transparent,
+                                        color: active ? _statusBgColor(s) : AppColors.bg,
                                         border: Border.all(color: active ? _statusColor(s) : AppColors.bdr2),
                                         borderRadius: BorderRadius.circular(20),
                                       ),
